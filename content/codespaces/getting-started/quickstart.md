@@ -1,103 +1,266 @@
----
-title: Quickstart for Codespaces
-intro: 'Try out {% data variables.product.prodname_codespaces %} in 5 minutes.'
-allowTitleToDifferFromFilename: true
-product: '{% data reusables.gated-features.codespaces %}'
-versions:
-  fpt: '*'
-  ghec: '*'
-type: quick_start
-topics:
-  - Codespaces
-redirect_from:
-  - /codespaces/codespaces-quickstart
----
+from selenium import webdriver
+from os import system, name
+import chromedriver_binary
+from time import time, strftime, gmtime, sleep
+import pyfiglet, os, threading
+import chromedriver_autoinstaller
 
-## Introduction
+# Check if the current version of chromedriver exists
+# and if it doesn't exist, download it automatically,
+# then add chromedriver to path
+chromedriver_autoinstaller.install()
 
-In this guide, you'll create a codespace from a [template repository](https://github.com/2percentsilk/haikus-for-codespaces) and explore some of the essential features available to you within the codespace.
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
 
-From this quickstart, you will learn how to create a codespace, connect to a forwarded port to view your running application, use version control in a codespace, and personalize your setup with extensions.
+clear()
+system('title TIKTOD V3')
 
-For more information on exactly how {% data variables.product.prodname_codespaces %} works, see the companion guide "[Deep dive into {% data variables.product.prodname_codespaces %}](/codespaces/getting-started/deep-dive)."
+print(pyfiglet.figlet_format("TIKTOD V3", font="slant"))
+print("1. Viewbot.\n2. Heartbot.\n3. Followerbot.\n3. Sharebot.\n4. Credits.\n")
 
-## Creating your codespace
+auto = int(input("Mode: "))
 
-1. Navigate to the [template repository](https://github.com/2percentsilk/haikus-for-codespaces) and select **Use this template**. 
+if auto == 1 or auto == 2 or auto == 3 or auto == 4:
+    vidUrl = input("TikTok video URL: ")
 
-2. Name your repository, select your preferred privacy setting, and click **Create repository from template**.
+    start = time()
+    time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
 
-3. Navigate to the main page of the newly created repository. Under the repository name, use the **{% octicon "code" aria-label="The code icon" %} Code** drop-down menu, and in the **Codespaces** tab, click **Create codespace on main**.
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--mute-audio")
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-  ![New codespace button](/assets/images/help/codespaces/new-codespace-button.png)
+    driver = webdriver.Chrome( options=chrome_options)
+    driver.set_window_size(1024, 650)
 
-## Running the application
+    Views = 0
+    Hearts = 0
+    Followers = 0
 
-Once your codespace is created, your repository will be automatically cloned into it. Now you can run the application and launch it in a browser.
+def beautify(arg):
+    return format(arg, ',d').replace(',', '.')
 
-1. Since this example uses a Node.js project, start the application by entering `npm run dev` in the terminal. This command executes the `dev` script in the package.json file and starts up the web application defined in the sample repository.
-   
-   ![npm run dev in terminal](/assets/images/help/codespaces/codespaces-npm-run-dev.png)
+def title1(): # Update the title IF option 1 was picked.
+    global Views
+    
+    while True:
+        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
+        system(f'title TIKTOD V3 ^| Views Sent: {beautify(Views)} ^| Elapsed Time: {time_elapsed}')
 
-    If you're following along with a different application type, enter the corresponding start command for that project.
+def title2(): # Update the title IF option 2 was picked.
+    global Hearts
+    
+    while True:
+        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
+        system(f'title TIKTOD V3 ^| Hearts Sent: {beautify(Hearts)} ^| Elapsed Time: {time_elapsed}')
 
-2. When your application starts, the codespace recognizes the port the application is running on and displays a prompt to let you know it has been forwarded. 
+def title3(): # Update the title IF option 3 was picked.
+    global Followers
+    
+    while True:
+        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
+        system(f'title TIKTOD V3 ^| Followers Sent: {beautify(Followers)} ^| Elapsed Time: {time_elapsed}')
+        
+def title4(): # Update the title IF option 1 was picked.
+    global Shares
+    
+    while True:
+        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
+        system(f'title TIKTOD V3 ^| Shares Sent: {beautify(Shares)} ^| Elapsed Time: {time_elapsed}')
 
-  ![Port forwarding toast](/assets/images/help/codespaces/quickstart-port-toast.png)
+    
+def loop1():
+    global Views
+    sleep(10)
+    
+    try:
+        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[4]/div/button").click()
+        
+    except:
+        print("[-] The captcha is unsolved!")
+        driver.refresh()
+        loop1()
+        
+    try:
+        sleep(2)
+        driver.find_element_by_xpath("//*[@id=\"sid4\"]/div/form/div/input").send_keys(vidUrl)
+        
+        sleep(1)
+        driver.find_element_by_xpath("//*[@id=\"sid4\"]/div/form/div/div/button").click()
+        
+        sleep(5)
+        driver.find_element_by_xpath("//*[@id=\"c2VuZC9mb2xsb3dlcnNfdGlrdG9V\"]/div[1]/div/form/button").click()
+        
+        driver.refresh()
+        Views += 1000
+        print("[+] Views sended!")
+        
+        sleep(300)
+        loop1()
+        
+    except:
+        print("[-] An error occured. Retrying..") 
+        driver.refresh()
+        loop1()
 
-3. Click **Open in Browser** to view your running application in a new tab.
+def loop2():
+    global Hearts
+    sleep(10)
+    
+    try:
+        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[2]/div/button").click()
+        
+    except:
+        print("[-] The captcha is unsolved!")
+        driver.refresh()
+        loop2()
+        
+    try:
+        sleep(2)
+        driver.find_element_by_xpath('//*[@id="sid2"]/div/form/div/input').send_keys(vidUrl)
+        
+        sleep(1)
+        driver.find_element_by_xpath('//*[@id="sid2"]/div/form/div/div/button').click()
+        
+        sleep(5)
+        driver.find_element_by_xpath('//*[@id="c2VuZE9nb2xsb3dlcnNfdGlrdG9r"]/div[1]/div/form/button').click()
+        
+        sleep(6)
+        hearts = driver.find_element_by_xpath('//*[@id="c2VuZE9nb2xsb3dlcnNfdGlrdG9r"]/span').text.split()
+        
+        Hearts += int(hearts[0])
+        print("[+] Hearts sended!")
+        
+        sleep(5)
+        driver.refresh()
+        
+        sleep(1800)
+        loop2()
+        
+    except:
+        print("[-] An error occured. Retrying..") 
+        driver.refresh()
+        loop2()
 
-## Edit the application and view changes
+def loop3():
+    global Followers
+    sleep(10)
+    
+    try:
+        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[1]/div/button").click()
+        
+    except:
+        print("[-] The captcha is unsolved!")
+        driver.refresh()
+        loop3()
+        
+    try:
+        sleep(2)
+        driver.find_element_by_xpath("//*[@id=\"sid\"]/div/form/div/input").send_keys(vidUrl)
+        
+        sleep(1)
+        driver.find_element_by_xpath("//*[@id=\"sid\"]/div/form/div/div/button").click()
+        
+        sleep(5)
+        driver.find_element_by_xpath("//*[@id=\"c2VuZF9mb2xsb3dlcnNfdGlrdG9r\"]/div[1]/div/form/button").click()
+        sleep(6)
+        folls = driver.find_element_by_xpath('//*[@id="c2VuZF9mb2xsb3dlcnNfdGlrdG9r"]/span').text.split()
+        
+        Followers += int(folls[0])
+        print("[+] Followers sended!")
+        driver.refresh()
+        
+        sleep(1800)
+        loop3()
+        
+    except:
+        print("[-] An error occured. Retrying..")
+        driver.refresh()
+        loop3()
 
-1. Switch back to your codespace and open the `haikus.json` file by double-clicking it in the File Explorer.
+def loop4():
+    global Shares
+    sleep(10)
+    
+    try:
+        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[5]/div/button").click()
+        
+    except:
+        print("[-] The captcha is unsolved!")
+        driver.refresh()
+        loop4()
+        
+    try:
+        sleep(2)
+        driver.find_element_by_xpath("//*[@id=\"sid7\"]/div/form/div/input").send_keys(vidUrl)
+        
+        sleep(1)
+        driver.find_element_by_xpath("//*[@id=\"sid7\"]/div/form/div/div/button").click()
+        
+        sleep(5)
+        driver.find_element_by_xpath("//*[@id=\"c2VuZC9mb2xsb3dlcnNfdGlrdG9s\"]/div[1]/div/form/button").click()
+        
+        driver.refresh()
+        Shares += 100
+        print("[+] Shares sended!")
+        
+        sleep(300)
+        loop4()
+        
+    except:
+        print("[-] An error occured. Retrying..")
+        driver.refresh()
+        loop4()
 
-2. Edit the `text` field of the first haiku to personalize the application with your own haiku.
+clear()
 
-3. Go back to the running application tab in your browser and refresh to see your changes.
-   
-  {% octicon "light-bulb" aria-label="The lightbulb icon" %}  If you've closed the tab, open the Ports panel and click the **Open in browser** icon for the running port.
-  ![Port Forwarding Panel](/assets/images/help/codespaces/quickstart-forward-port.png)
+print(pyfiglet.figlet_format("TIKTOD V3", font="slant"))
+print("Log:")
 
-## Committing and pushing your changes
-
-Now that you've made a few changes, you can use the integrated terminal or the source view to commit and push the changes back to the remote.
-
-{% data reusables.codespaces.source-control-display-dark %}
-1. To stage your changes, click  **+** next to the file you've changed, or next to **Changes** if you've changed multiple files and you want to stage them all.
-![Source control side bar with staging button highlighted](/assets/images/help/codespaces/codespaces-commit-stage.png)
-1. Type a commit message describing the change you've made.
-![Source control side bar with a commit message](/assets/images/help/codespaces/codespaces-commit-commit-message.png)  
-1. To commit your staged changes, click the check mark at the top the source control side bar.
-![Click the check mark icon](/assets/images/help/codespaces/codespaces-commit-checkmark-icon.png)  
-    You can push the changes you've made. This applies those changes to the upstream branch on the remote repository. You might want to do this if you're not yet ready to create a pull request, or if you prefer to create a pull request on {% data variables.product.prodname_dotcom %}.
-1. At the top of the side bar, click the ellipsis (**...**).
-![Ellipsis button for View and More Actions](/assets/images/help/codespaces/source-control-ellipsis-button-nochanges.png)
-1. In the drop-down menu, click **Push**.
-
-## Personalizing with an extension
-
-Within a codespace, you have access to the Visual Studio Code Marketplace. For this example, you'll install an extension that alters the theme, but you can install any extension that is useful for your workflow.
-
-1. In the left sidebar, click the Extensions icon.
-
-2.  In the search bar, enter `fairyfloss` and install the fairyfloss extension.
-
-  ![Add an extension](/assets/images/help/codespaces/add-extension.png)
-
-3. Select the `fairyfloss` theme by selecting it from the list.
-
-  ![Select the fairyfloss theme](/assets/images/help/codespaces/fairyfloss.png)
-
-4. Changes you make to your editor setup in the current codespace, such as theme and keyboard bindings, are synced automatically via [Settings Sync](https://code.visualstudio.com/docs/editor/settings-sync) to any other codespaces you open and any instances of Visual Studio Code that are signed into your GitHub account.
-
-## Next Steps
-
-You've successfully created, personalized, and run your first application within a codespace but there's so much more to explore! Here are some helpful resources for taking your next steps with {% data variables.product.prodname_codespaces %}.
-  - [Deep dive](/codespaces/getting-started/deep-dive): This quickstart presented some of the features of {% data variables.product.prodname_codespaces %}. The deep dive looks at these areas from a technical standpoint.
-  - [Setting up your project for {% data variables.product.prodname_codespaces %}](/codespaces/getting-started-with-codespaces): These guides provide information on setting up your project to use {% data variables.product.prodname_codespaces %} with specific languages.
-  - [Configuring {% data variables.product.prodname_codespaces %} for your project](/codespaces/setting-up-your-codespace/configuring-codespaces-for-your-project): This guide provides details on creating a custom configuration for {% data variables.product.prodname_codespaces %} for your project.
-
-## Further reading
-
-- [Enabling {% data variables.product.prodname_codespaces %} for your organization](/codespaces/managing-codespaces-for-your-organization/enabling-codespaces-for-your-organization)
-- [Managing billing for {% data variables.product.prodname_codespaces %} in your organization](/codespaces/managing-codespaces-for-your-organization/managing-billing-for-codespaces-in-your-organization)
+if auto == 1:
+    driver.get("https://zefoy.com/")
+    
+    a = threading.Thread(target=title1)
+    b = threading.Thread(target=loop1)
+    
+    a.start()
+    b.start()
+    
+elif auto == 2:
+    driver.get("https://zefoy.com/")
+    
+    a = threading.Thread(target=title2)
+    b = threading.Thread(target=loop2)
+    
+    a.start()
+    b.start()
+    
+elif auto == 3:
+    driver.get("https://zefoy.com/")
+    
+    a = threading.Thread(target=title3)
+    b = threading.Thread(target=loop3)
+    
+    a.start()
+    b.start()
+    
+elif auto == 4:
+    driver.get("https://zefoy.com/")
+    
+    a = threading.Thread(target=title4)
+    b = threading.Thread(target=loop4)
+    
+    a.start()
+    b.start()
+    
+elif auto == 5:
+    print("[+] This program was created by @kangoka. [github.com/kangoka]")
+    print("[+] This program was origionally uploaded to github.com/kangoka/tiktodv3.")
+    print("[+] This program was majorly improved by @XxBi1a. [github.com/XxB1a]")
+    
+else:
+    print(f"{auto} is not a valid option. Please pick 1, 2, 3, 4 or 5")
